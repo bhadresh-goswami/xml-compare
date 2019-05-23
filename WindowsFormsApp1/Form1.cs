@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
+
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
@@ -20,95 +22,144 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            #region Code for xml compaire
+            //#region Code for xml compaire
 
             
-            string path1 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\xml1.xml";
-            string path2 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\xml2.xml";
-            //MessageBox.Show(path, "hi", MessageBoxButtons.OK);
-            DataSet ds1 = new DataSet();
-            ds1.ReadXml(path1);
+            //string path1 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\xml1.xml";
+            //string path2 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\xml2.xml";
+            ////MessageBox.Show(path, "hi", MessageBoxButtons.OK);
+            //DataSet ds1 = new DataSet();
+            //ds1.ReadXml(path1);
 
 
-            DataSet ds2 = new DataSet();
-            ds2.ReadXml(path2);
-            string colsname = "";
-            foreach (DataColumn cols in ds1.Tables[0].Columns)
-            {
-                bool isnot = true;
-                foreach (DataColumn cols2 in ds2.Tables[0].Columns)
-                {
-                    //colsname += "->" + cols.ColumnName + "<-\n";
-                    if (cols.ColumnName == cols2.ColumnName)
-                    {
-                        isnot = false;
-                        break;
-                    }
-                }
-                if (isnot == true)
-                {
-                    colsname += "->" + cols.ColumnName + "<-\n";
-                }
-            }
-            MessageBox.Show(colsname, "hi!", MessageBoxButtons.OK);
+            //DataSet ds2 = new DataSet();
+            //ds2.ReadXml(path2);
+            //string colsname = "";
+            //foreach (DataColumn cols in ds1.Tables[0].Columns)
+            //{
+            //    bool isnot = true;
+            //    foreach (DataColumn cols2 in ds2.Tables[0].Columns)
+            //    {
+            //        //colsname += "->" + cols.ColumnName + "<-\n";
+            //        if (cols.ColumnName == cols2.ColumnName)
+            //        {
+            //            isnot = false;
+            //            break;
+            //        }
+            //    }
+            //    if (isnot == true)
+            //    {
+            //        colsname += "->" + cols.ColumnName + "<-\n";
+            //    }
+            //}
+            //MessageBox.Show(colsname, "hi!", MessageBoxButtons.OK);
 
 
-            colsname = "";
-            foreach (DataColumn cols in ds2.Tables[0].Columns)
-            {
-                bool isnot = true;
+            //colsname = "";
+            //foreach (DataColumn cols in ds2.Tables[0].Columns)
+            //{
+            //    bool isnot = true;
 
 
-                foreach (DataColumn cols2 in ds1.Tables[0].Columns)
-                {
-                    if (cols.ColumnName == cols2.ColumnName)
-                    {
-                        isnot = false;
-                        break;
-                    }
-                }
-                if (isnot == true)
-                {
-                    colsname += "->" + cols.ColumnName + "<-\n";
-                }
-            }
-            MessageBox.Show(colsname, "hi!", MessageBoxButtons.OK);
+            //    foreach (DataColumn cols2 in ds1.Tables[0].Columns)
+            //    {
+            //        if (cols.ColumnName == cols2.ColumnName)
+            //        {
+            //            isnot = false;
+            //            break;
+            //        }
+            //    }
+            //    if (isnot == true)
+            //    {
+            //        colsname += "->" + cols.ColumnName + "<-\n";
+            //    }
+            //}
+            //MessageBox.Show(colsname, "hi!", MessageBoxButtons.OK);
 
-            string valueDiff = "";
-            for (int i = 0; i < ds1.Tables[0].Rows.Count; i++)
-            {
-                DataRow dr1 = ds1.Tables[0].Rows[i];
-                DataRow dr2 = ds2.Tables[0].Rows[i];
+            //string valueDiff = "";
+            //for (int i = 0; i < ds1.Tables[0].Rows.Count; i++)
+            //{
+            //    DataRow dr1 = ds1.Tables[0].Rows[i];
+            //    DataRow dr2 = ds2.Tables[0].Rows[i];
 
-                for (int j = 0; j < ds1.Tables[0].Columns.Count; j++)
-                {
-                    if (ds1.Tables[0].Columns[j].ColumnName == ds2.Tables[0].Columns[j].ColumnName)
-                    {
-                        if (dr1[ds1.Tables[0].Columns[j].ColumnName].ToString() != dr2[ds2.Tables[0].Columns[j].ColumnName].ToString())
-                        {
-                            valueDiff += "ColName xml1: ";
-                            valueDiff += ds1.Tables[0].Columns[j].ColumnName;
-                            valueDiff += " ColName xml1 value: ";
-                            valueDiff += dr1[ds1.Tables[0].Columns[j].ColumnName];
-                            valueDiff += " && ColName xml2: ";
-                            valueDiff += ds2.Tables[0].Columns[j].ColumnName;
-                            valueDiff += " ColName xml2 value: ";
-                            valueDiff += dr2[ds2.Tables[0].Columns[j].ColumnName];
-
-
-                            valueDiff += "\n\n";
+            //    for (int j = 0; j < ds1.Tables[0].Columns.Count; j++)
+            //    {
+            //        if (ds1.Tables[0].Columns[j].ColumnName == ds2.Tables[0].Columns[j].ColumnName)
+            //        {
+            //            if (dr1[ds1.Tables[0].Columns[j].ColumnName].ToString() != dr2[ds2.Tables[0].Columns[j].ColumnName].ToString())
+            //            {
+            //                valueDiff += "ColName xml1: ";
+            //                valueDiff += ds1.Tables[0].Columns[j].ColumnName;
+            //                valueDiff += " ColName xml1 value: ";
+            //                valueDiff += dr1[ds1.Tables[0].Columns[j].ColumnName];
+            //                valueDiff += " && ColName xml2: ";
+            //                valueDiff += ds2.Tables[0].Columns[j].ColumnName;
+            //                valueDiff += " ColName xml2 value: ";
+            //                valueDiff += dr2[ds2.Tables[0].Columns[j].ColumnName];
 
 
-                        }
-                    }
-                }
-            }
+            //                valueDiff += "\n\n";
 
-            MessageBox.Show(valueDiff);
 
-            //            dataGridView1.DataSource = dtIntersect;
+            //            }
+            //        }
+            //    }
+            //}
 
-            #endregion
+            //MessageBox.Show(valueDiff);
+
+            ////            dataGridView1.DataSource = dtIntersect;
+
+            //#endregion
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            openFileDialog2.ShowDialog();
+
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            lblFile1Name.Text = openFileDialog1.FileName;
+            string xml1 = File.ReadAllText(openFileDialog1.FileName);
+            xmlText1.Text = xml1;
+
+        }
+
+        private void openFileDialog2_FileOk(object sender, CancelEventArgs e)
+        {
+            lblFile2Name.Text = openFileDialog2.FileName;
+            string xml2 = File.ReadAllText(openFileDialog2.FileName);
+            xmlText2.Text = xml2;
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string xml1 = File.ReadAllText(openFileDialog1.FileName);
+            string xml2 = File.ReadAllText(openFileDialog2.FileName);
+
+            var node1 = XElement.Parse(xml1).CreateReader();
+            var node2 = XElement.Parse(xml2).CreateReader();
+
+            var result = new XDocument();
+            var writer = result.CreateWriter();
+
+            var diff = new Microsoft.XmlDiffPatch.XmlDiff();
+            diff.Compare(node1, node2, writer);
+            writer.Flush();
+            writer.Close();
+
+            xmlText1.Text = xml1;
+            xmlText2.Text = xml2;
+
+            xmlTextDiff.Text = result.Document.ToString();
         }
     }
 }

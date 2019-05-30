@@ -24,7 +24,7 @@ namespace WindowsFormsApp1
         {
             //#region Code for xml compaire
 
-            
+
             //string path1 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\xml1.xml";
             //string path2 = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\xml2.xml";
             ////MessageBox.Show(path, "hi", MessageBoxButtons.OK);
@@ -145,13 +145,13 @@ namespace WindowsFormsApp1
             string xml1 = File.ReadAllText(openFileDialog1.FileName);
             string xml2 = File.ReadAllText(openFileDialog2.FileName);
 
-            var node1 = XElement.Parse(xml1).CreateReader();
-            var node2 = XElement.Parse(xml2).CreateReader();
+            XmlReader node1 = XElement.Parse(xml1).CreateReader();
+            XmlReader node2 = XElement.Parse(xml2).CreateReader();
 
-            var result = new XDocument();
-            var writer = result.CreateWriter();
+            XDocument result = new XDocument();
+            XmlWriter writer = result.CreateWriter();
 
-            var diff = new Microsoft.XmlDiffPatch.XmlDiff();
+            Microsoft.XmlDiffPatch.XmlDiff diff = new Microsoft.XmlDiffPatch.XmlDiff();
             diff.Compare(node1, node2, writer);
             writer.Flush();
             writer.Close();
@@ -160,6 +160,31 @@ namespace WindowsFormsApp1
             xmlText2.Text = xml2;
 
             xmlTextDiff.Text = result.Document.ToString();
+            
+            foreach (XName name in result.Document.Root.DescendantNodes().OfType<XElement>()
+        .Select(x => x.Name).Distinct())
+            {
+                int sindex = 0;
+                while (sindex<xmlText1.Text.Length)
+                {
+                   // Console.WriteLine(result.Document.Element(name.LocalName).Value);
+                    int windex = xmlText1.Find("Name", sindex, RichTextBoxFinds.None);
+                    if (windex != -1)
+                    {
+                        xmlText1.SelectionStart = windex;
+                        xmlText1.SelectionLength = name.LocalName.Length;
+                        xmlText1.SelectionBackColor = Color.Yellow;
+                        xmlText2.SelectionStart = windex;
+                        xmlText2.SelectionLength = name.LocalName.Length;
+                        xmlText2.SelectionBackColor = Color.Yellow;
+                    }
+                    else
+                        break;
+
+                    sindex += windex + name.LocalName.Length;
+                }
+                //Console.WriteLine(name);
+            }
         }
     }
 }
